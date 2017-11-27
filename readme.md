@@ -18,8 +18,8 @@ The first block of the chain (genesis block) is valid in the following case:
 * there are no other blocks in blockchain
 
 Nodes should be synchronized if only they have the same genesis block! 
-If the genesses are different, then it is considered that they are nodes of different networks and they should not be interconnected.
-Suppose for this task that if a node does not have a genesis block, then it can add any valid one.
+If the genesis blocks are different, then it is considered that they are nodes of different networks and they should not be interconnected.
+Suppose for this task that if a node does not have a genesis block, then it can get any valid one.
 
 A blockchain node should know the list of all nodes connected to it (both incoming and outgoing connections). 
 Once the node gets the continuation of the best chain, it must validate it and pass to its neighbors.

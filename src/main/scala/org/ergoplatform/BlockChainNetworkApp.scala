@@ -22,12 +22,12 @@ object BlockChainNetworkApp extends App {
   def sendNewBlockToRandomNode: Future[Unit] = {
     val randomNode = new Random().shuffle(nodes).head
     for {
-      randomNodeBlockChain <- randomNode.getBlockchain
+      randomNodeBlockChain <- randomNode.getBlockСhain
     } yield randomNode.sendBlock(Block.forge(randomNodeBlockChain.lastBlockId))
   }
 
   def getAllNodesBlockChains: Future[Map[String, BlockChain]] = {
-    Future.sequence(nodes.map(n => n.getBlockchain.map(bc => n.name -> bc))).map(_.toMap)
+    Future.sequence(nodes.map(n => n.getBlockСhain.map(bc => n.name -> bc))).map(_.toMap)
   }
 
   actorSystem.scheduler.schedule(1.seconds, 1.seconds) {
