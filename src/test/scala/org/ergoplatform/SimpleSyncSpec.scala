@@ -13,76 +13,6 @@ class SimpleSyncSpec extends TestKit(ActorSystem("BlockChainNodeSpec")) with Imp
   }
 
   "An BlockChain node actor" must {
-    "accept valid block" in {
-      val bc = BlockChain.withGenesis
-      val node = system.actorOf(BlockChainNodeActor.props(bc, Seq.empty))
-
-      val blockChainWithNewBlock = bc.append(Block.forge(bc.lastBlockId)).get
-
-      node ! blockChainWithNewBlock.blocks.values.last
-      node ! GetBlockChain
-
-      expectMsg(blockChainWithNewBlock)
-    }
-
-    "not accept second genesis block" in {
-      val bc = BlockChain.withGenesis
-      val node = system.actorOf(BlockChainNodeActor.props(bc, Seq.empty))
-
-      val invalidBlock = Block.forge()
-
-      node ! invalidBlock
-      node ! GetBlockChain
-      expectMsg(bc)
-    }
-
-    "not accept invalid by id block" in {
-      val bc = BlockChain.withGenesis
-      val node = system.actorOf(BlockChainNodeActor.props(bc, Seq.empty))
-
-      val invalidBlock = Block.forge(bc.lastBlockId).copy(id = "123")
-
-      node ! invalidBlock
-      node ! GetBlockChain
-      expectMsg(bc)
-    }
-
-    "not accept invalid by score block" in {
-      val bc = BlockChain.withGenesis
-      val node = system.actorOf(BlockChainNodeActor.props(bc, Seq.empty))
-
-      val invalidBlock = Block.forge(bc.lastBlockId).copy(score = -1)
-
-      node ! invalidBlock
-      node ! GetBlockChain
-      expectMsg(bc)
-    }
-
-    "not accept invalid by parent block" in {
-      val bc = BlockChain.withGenesis
-      val node = system.actorOf(BlockChainNodeActor.props(bc, Seq.empty))
-
-      val invalidBlock = Block.forge().copy(parentId = Some("1234"))
-
-      node ! invalidBlock
-      node ! GetBlockChain
-      expectMsg(bc)
-    }
-
-    "connects to a known node" in {
-      val blockChainWithOnlyGenesis = BlockChain.withGenesis
-      val blockChainWithNewBlock = blockChainWithOnlyGenesis.append(Block.forge(blockChainWithOnlyGenesis.lastBlockId)).get
-      
-      val nodeWithNewBlock = system.actorOf(BlockChainNodeActor.props(blockChainWithNewBlock, Seq.empty))
-      val node = system.actorOf(BlockChainNodeActor.props(blockChainWithOnlyGenesis, Seq(nodeWithNewBlock)))
-
-      node ! GetConnectedPeers
-      expectMsg(Seq(nodeWithNewBlock))
-
-      nodeWithNewBlock ! GetConnectedPeers
-      expectMsg(Seq(node))
-    }
-
     "synchronize with a known node" in {
       val blockChainWithOnlyGenesis = BlockChain.withGenesis
       val blockChainWithNewBlock = blockChainWithOnlyGenesis.append(Block.forge(blockChainWithOnlyGenesis.lastBlockId)).get
@@ -93,21 +23,6 @@ class SimpleSyncSpec extends TestKit(ActorSystem("BlockChainNodeSpec")) with Imp
       node ! GetBlockChain
 
       expectMsg(blockChainWithOnlyGenesis)
-    }
-
-    "connects with new outgoing connected node" in {
-      val blockChainWithOnlyGenesis = BlockChain.withGenesis
-      val blockChainWithNewBlock = blockChainWithOnlyGenesis.append(Block.forge(blockChainWithOnlyGenesis.lastBlockId)).get
-      
-      val nodeWithNewBlock = system.actorOf(BlockChainNodeActor.props(blockChainWithNewBlock, Seq.empty))
-      val node = system.actorOf(BlockChainNodeActor.props(blockChainWithOnlyGenesis, Seq.empty))
-
-      node ! ConnectTo(nodeWithNewBlock)
-
-      Thread.sleep(1000)
-
-      node ! GetConnectedPeers
-      expectMsg(Seq(nodeWithNewBlock))
     }
 
     "synchronize with new outgoing connected node" in {
@@ -123,21 +38,6 @@ class SimpleSyncSpec extends TestKit(ActorSystem("BlockChainNodeSpec")) with Imp
 
       node ! GetBlockChain
       expectMsg(blockChainWithOnlyGenesis)
-    }
-
-    "connects with new incoming connected node" in {
-      val blockChainWithOnlyGenesis = BlockChain.withGenesis
-      val blockChainWithNewBlock = blockChainWithOnlyGenesis.append(Block.forge(blockChainWithOnlyGenesis.lastBlockId)).get
-
-      val nodeWithNewBlock = system.actorOf(BlockChainNodeActor.props(blockChainWithNewBlock, Seq.empty))
-      val node = system.actorOf(BlockChainNodeActor.props(blockChainWithOnlyGenesis, Seq.empty))
-
-      nodeWithNewBlock ! ConnectTo(node)
-
-      Thread.sleep(1000)
-
-      node ! GetConnectedPeers
-      expectMsg(Seq(nodeWithNewBlock))
     }
 
     "synchronize with new incoming connected node" in {
