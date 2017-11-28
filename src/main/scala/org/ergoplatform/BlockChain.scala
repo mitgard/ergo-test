@@ -5,16 +5,17 @@ import scala.util.{Failure, Success, Try}
 
 object BlockChain {
   def withGenesis: BlockChain = empty.append(Block.forge()).get
-  val empty = BlockChain()
+  private val empty = BlockChain()
 }
 
 case class BlockChain private(blocks: ListMap[String, Block] = ListMap.empty) extends Iterable[Block] {
 
-  def lastBlockId: Option[String] = blocks.lastOption.map(_._2).map(_.id)
+  lazy val lastBlockId: Option[String] = lastBlock.map(_.id)
+  lazy val lastBlock: Option[Block] = blocks.lastOption.map(_._2)
 
-  def height: Int = blocks.size
+  lazy val height: Int = blocks.size
 
-  def score: Long = iterator.map(_.score).sum
+  lazy val score: Long = iterator.map(_.score).sum
 
   def contains(b: Block): Boolean = iterator.contains(b)
 

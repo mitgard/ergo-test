@@ -1,7 +1,7 @@
 The blockchain synchronization task
 
-The blockchain consists of blocks. 
-Suppose for this task that the blocks do not carry any useful information and simply increase the total chain score. 
+The blockchain consists of blocks.
+Suppose for this task that the blocks do not carry any useful information and simply increase the total chain score and a node already has a valid genesis block. 
 The block is valid in the following case:
 
 * block score is a positive number
@@ -11,15 +11,6 @@ The block is valid in the following case:
 It is stored by network of nodes that exchange the blocks of best chain with each other.
 The best is the chain with the highest total score of its blocks. 
 A node at startup may not have a chain and other connected nodes. 
-
-The first block of the chain (genesis block) is valid in the following case:
-
-* block is valid by rules above
-* there are no other blocks in blockchain
-
-Nodes should be synchronized if only they have the same genesis block! 
-If the genesis blocks are different, then it is considered that they are nodes of different networks and they should not be interconnected.
-Suppose for this task that if a node does not have a genesis block, then it can get any valid one.
 
 A blockchain node should know the list of all nodes connected to it (both incoming and outgoing connections). 
 Once the node gets the continuation of the best chain, it must validate it and pass to its neighbors.
