@@ -4,8 +4,8 @@ import scala.collection.immutable.ListMap
 import scala.util.{Failure, Success, Try}
 
 object BlockChain {
-  def withGenesis: BlockChain = empty.append(Block.forge()).get
-  private val empty = BlockChain()
+  val genesisBlock = Block(None, "ff9320b9-f994-4726-b85b-694c9ed59764", 1)
+  def withGenesis: BlockChain = BlockChain().append(genesisBlock).get
 }
 
 case class BlockChain private(blocks: ListMap[String, Block] = ListMap.empty) extends Iterable[Block] {
