@@ -5,6 +5,8 @@ import akka.testkit.{ImplicitSender, TestKit}
 import org.ergoplatform.BlockChainNodeActor.{ConnectTo, GetConnectedPeers}
 import org.scalatest.{BeforeAndAfterAll, Matchers, WordSpecLike}
 
+import scala.concurrent.duration._
+
 class ConnectionSpec extends TestKit(ActorSystem("ConnectionSpec")) with ImplicitSender
   with WordSpecLike with Matchers with BeforeAndAfterAll {
 
@@ -36,7 +38,7 @@ class ConnectionSpec extends TestKit(ActorSystem("ConnectionSpec")) with Implici
 
       node ! ConnectTo(nodeWithNewBlock)
 
-      Thread.sleep(1000)
+      expectNoMessage(1.second)
 
       node ! GetConnectedPeers
       expectMsg(Seq(nodeWithNewBlock))
@@ -51,7 +53,7 @@ class ConnectionSpec extends TestKit(ActorSystem("ConnectionSpec")) with Implici
 
       nodeWithNewBlock ! ConnectTo(node)
 
-      Thread.sleep(1000)
+      expectNoMessage(1.second)
 
       node ! GetConnectedPeers
       expectMsg(Seq(nodeWithNewBlock))
