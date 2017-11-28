@@ -56,4 +56,5 @@ class ConnectionSpec extends TestKit(ActorSystem("ConnectionSpec")) with Implici
       node ! GetConnectedPeers
       expectMsg(Seq(nodeWithNewBlock))
     }
+  }
 }
