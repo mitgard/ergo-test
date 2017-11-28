@@ -12,6 +12,7 @@ object Block {
   def generateId: String = UUID.randomUUID().toString
 
   case class ValidationError(msg: String)
+
   def isValid(b: Block, bc: BlockChain): Either[ValidationError, Block] = {
     if (bc.contains(b)) {
       // already in blockchain

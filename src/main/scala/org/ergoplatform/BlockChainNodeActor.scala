@@ -6,12 +6,17 @@ import scala.util.{Failure, Success}
 
 object BlockChainNodeActor {
   def props(startBlockChain: BlockChain, knownPeers: Seq[ActorRef]): Props = Props(new BlockChainNodeActor(startBlockChain, knownPeers))
+
   case object GetBlockChain
+
   case object GetConnectedPeers
+
   case class ConnectTo(peer: ActorRef)
+
 }
 
 class BlockChainNodeActor(startBlockChain: BlockChain, knownPeers: Seq[ActorRef]) extends Actor {
+
   import BlockChainNodeActor._
 
   override def preStart(): Unit =

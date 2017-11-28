@@ -5,6 +5,7 @@ import scala.util.{Failure, Success, Try}
 
 object BlockChain {
   val genesisBlock = Block(None, "ff9320b9-f994-4726-b85b-694c9ed59764", 1)
+
   def withGenesis: BlockChain = BlockChain().append(genesisBlock).get
 }
 

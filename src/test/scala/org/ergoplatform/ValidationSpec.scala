@@ -2,7 +2,7 @@ package org.ergoplatform
 
 import akka.actor.ActorSystem
 import akka.testkit.{ImplicitSender, TestKit}
-import org.ergoplatform.BlockChainNodeActor.{ConnectTo, GetBlockChain, GetConnectedPeers}
+import org.ergoplatform.BlockChainNodeActor.GetBlockChain
 import org.scalatest.{BeforeAndAfterAll, Matchers, WordSpecLike}
 
 class ValidationSpec extends TestKit(ActorSystem("ValidationSpec")) with ImplicitSender
